@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\OlympicGameController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/olympic-games');
+Route::resource('olympic-games', OlympicGameController::class);
