@@ -1,0 +1,291 @@
+// путь к шрифтам Font Awesome (копируются в public/webfonts через webpack.mix.js)
+$fa-font-path: "../webfonts";
+
+// 1. цветовая схема 
+$primary-text: #333333;
+$secondary-text: #666666;
+$bg-color: #f5f5f5;
+$white: #ffffff;
+$accent-color: #4a90e2;
+$card-colors: #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7;
+
+// передаём цвета в Bootstrap 
+$primary: $accent-color;
+$body-bg: $bg-color;
+$body-color: $primary-text;
+$body-secondary-color: $secondary-text;
+
+// 2. кастомные брейкпоинты
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px //добавить свои брейкпоинты 
+);
+
+// контейнер стр
+$container-max-widths: (
+sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+  xxxl: 1500px
+);
+
+// 3. импорт bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// 3.1 Font Awesome (раньше подключался из JS, теперь через SCSS)
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/brands";
+
+// градиенты для шапок мод окон
+$header-gradients: (
+  athens: (#c41e3a, #8b0000),
+  beijing: (#ffd700, #ff8c00),
+  london: (#1e3c72, #2a5298),
+  rio: (#009c3b, #002776),
+  tokyo: (#bc002d, #8b0000)
+);
+
+// 4. миксин для темы карточки
+@mixin card-theme($color) {
+  border-top-color: $color;
+
+  &:hover {
+    box-shadow: 0 8px 16px rgba($color, 0.3);
+  }
+
+  .btn-details:hover {
+    background-color: $color;
+    border-color: $color;
+    color: $primary-text;
+  }
+}
+
+// 5.кастомные стили 
+html {
+  scroll-padding-top: 80px;
+}
+
+// шапка
+.navbar {
+  background-color: rgba($white, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: $accent-color;
+  }
+}
+
+.main-content {
+  
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  .page-title {
+    color: $primary-text;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+
+    // полоска под заголовком
+    &::after {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 4px;
+      margin-top: 12px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, $card-colors);
+    }
+  }
+
+  .page-subtitle {
+    color: $secondary-text;
+    margin-bottom: 40px;
+  }
+}
+
+// базовые стили для карточки
+.card-custom {
+  width: 300px;
+  margin: 0 auto;
+  border-top: 4px solid transparent;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  // картинка по ширине карточки
+  .card-img-top {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  // overlay с типом объекта поверх изображения
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    z-index: 10;
+
+    .card-type {
+      color: $white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+
+    .card-img-top {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// раскрашиваем карточки по порядку
+@for $i from 1 through length($card-colors) {
+  .row > .col:nth-child(#{$i}) .card-custom {
+    @include card-theme(nth($card-colors, $i));
+  }
+}
+
+// стили для мод окон
+.modal-content {
+  border-radius: 15px;
+  border: none;
+}
+
+.modal-header {
+  border-radius: 15px 15px 0 0;
+  border-bottom: none;
+  padding: 1.5rem 2rem;
+}
+
+@each $city, $colors in $header-gradients {
+  .modal-header-#{$city} {
+    background: linear-gradient(135deg, nth($colors, 1) 0%, nth($colors, 2) 100%);
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-footer {
+  padding: 1rem 2rem 1.5rem;
+  border-top: none;
+}
+
+.modal-img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+}
+
+// стекло эффекты
+.glass-effect {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-bg {
+  background: rgba(248, 249, 250, 0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.fact-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: transform 0.3s, box-shadow 0.3s;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.stats-list {
+  .stat-item {
+    transition: background-color 0.2s;
+    &:hover {
+      background-color: rgba(248, 249, 250, 0.5);
+    }
+  }
+}
+
+.country-link {
+  position: relative;
+  font-weight: 500;
+  cursor: pointer;
+  &:hover {
+    color: #667eea !important;
+  }
+}
+
+// иконка загрузки в тост
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-icon {
+  animation-name: rotate;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+// стили для низа
+footer {
+  .social-links a {
+    width: 35px;
+    height: 35px;
+    border: 2px solid $accent-color;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $accent-color;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: $accent-color;
+      color: $white;
+    }
+  }
+}
+
+// широкий экран
+@include media-breakpoint-up(xxxl) {
+  .main-content .page-title {
+    font-size: 2.5rem;
+  }
+}
